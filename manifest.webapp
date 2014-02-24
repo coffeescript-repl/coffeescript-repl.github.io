@@ -1,0 +1,22 @@
+{
+  "version": "0.1",
+  "name": "CoffeeScript REPL",
+  "description": "CoffeeScript REPL",
+  "launch_path": "/u/265158/webapp/index.html",
+  "icons": {
+    "128": "/u/265158/webapp/icon-128.png"
+  },
+  "developer": {
+    "name": "Legokichi Duckscallion",
+    "url": "http://duxca.com/"
+  },
+  "locales": {
+    "en-US": {
+      "description": "CoffeeScript REPL",
+      "developer": {
+        "url": "http://duxca.com/"
+      }
+    }
+  },
+  "default_locale": "en-US"
+}
