@@ -1,7 +1,7 @@
 {
-  "version": "0.1",
+  "version": "0.3",
   "name": "CoffeeScript REPL",
-  "description": "CoffeeScript REPL",
+  "description": "CoffeeScript REPL provides a way to interactively run JavaScript and see the results. It can be used for debugging, testing, or just trying things out.",
   "launch_path": "/index.html",
   "icons": {
     "128": "/icon-128.png"
@@ -12,7 +12,7 @@
   },
   "locales": {
     "en-US": {
-      "description": "CoffeeScript REPL",
+      "description": "CoffeeScript REPL provides a way to interactively run JavaScript and see the results. It can be used for debugging, testing, or just trying things out.",
       "developer": {
         "url": "http://duxca.com/"
       }
