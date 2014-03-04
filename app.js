@@ -122,7 +122,11 @@
     if (env == null) {
       env = this;
     }
-    return eval.call(env, code);
+    var result;
+  with(env){
+    result = eval(code);
+  };
+    return result;
   };
 
   console.assert(evaluate("this") === this, "evaluate");
