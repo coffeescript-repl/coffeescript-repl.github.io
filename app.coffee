@@ -113,7 +113,11 @@ macroexpand = (code)-> # string -> string
 console.assert(macroexpand("do -> x") is "(function() {\n  return x;\n})();\n", "macroexpand")
 
 evaluate = (code, env=this)-> # string -> Object -> any
-  eval.call(env, code)
+  `var result;
+  with(env){
+    result = eval(code);
+  }`
+  result
 console.assert(evaluate("this") is this, "evaluate")
 
 getPropertys = (o)-> # any -> [string]
