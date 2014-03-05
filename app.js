@@ -10,8 +10,8 @@
     setTimeout((function() {
       return $input.focus();
     }), 100);
-    history = localStorage["history"] != null ? JSON.parse(localStorage["history"]) : [];
-    $log.append(localStorage["log"] != null ? localStorage["log"] : help);
+    history = [];
+    $log.append(help);
     $$ = null;
     return $form.submit(function(ev) {
       var buffer, clear, dir, err, fst, input, log, n, output, snd, trd, _input, _ref;
@@ -24,7 +24,6 @@
           return "" + i + "\t" + v;
         }).join("\n");
         log = "coffee> " + input + "\n" + output;
-        localStorage["log"] += log;
         $log.append(log);
       } else if (/\s$/.test(input)) {
         _ref = autocomplete(input.replace(/\s+$/, "")), fst = _ref.fst, snd = _ref.snd, trd = _ref.trd;
@@ -39,23 +38,19 @@
           log = "coffee> " + input + "\n" + (trd.map(function(key) {
             return snd + key;
           }).join("\n")) + "\n\n";
-          localStorage["log"] += log;
           $log.append(log);
           $(window).scrollTop(9999999);
         }
       } else if (/^\.clear/.test(input)) {
         $input.val("");
         $log.html("");
-        localStorage["log"] = "";
       } else if (/^\.help/.test(input)) {
         output = help;
         $input.val("");
         log = "coffee> " + input + "\n" + output;
-        localStorage["log"] += log;
         $log.append(log);
       } else {
         history.unshift(input);
-        localStorage["history"] = JSON.stringify(history);
         buffer = "";
         log = function(str) {
           buffer += str + "\n";
@@ -63,7 +58,7 @@
         };
         dir = function(obj, i) {
           if (i == null) {
-            i = 0;
+            i = 1;
           }
           buffer += dump(obj, i) + "\n";
           return void 0;
@@ -81,14 +76,13 @@
             load: load,
             $$: $$
           });
-          output = buffer + dump($$) + "\n\n";
+          output = buffer + dump($$, 1) + "\n\n";
         } catch (_error) {
           err = _error;
           output = buffer + err.stack + "\n";
         }
         $input.val("");
         log = "coffee> " + input + "\n" + output;
-        localStorage["log"] += log;
         $log.append(log);
       }
       setTimeout((function() {
@@ -310,6 +304,7 @@
         return "{\n" + props + "\n" + (space(i)) + "}";
       }
     };
+    console.log(type(o));
     switch (type(o)) {
       case "null":
       case "undefined":
@@ -317,7 +312,7 @@
       case "number":
         return "" + o;
       case "string":
-        return "\"" + o + "\"";
+        return "\"" + ($('<div>').text(o).html().split('\n').join('\\n')) + "\"";
       case "function":
         return Object.prototype.toString.call(o);
       case "date":

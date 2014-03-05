@@ -7,8 +7,8 @@ $ ->
     $input.focus()
   ), 100
 
-  history = if localStorage["history"]? then JSON.parse(localStorage["history"]) else []
-  $log.append if localStorage["log"]? then localStorage["log"] else help
+  history = []
+  $log.append help
   $$ = null
 
   $form.submit (ev)->
@@ -22,7 +22,6 @@ $ ->
         coffee> #{input}
         #{output}
       """
-      localStorage["log"] += log
       $log.append(log)
     else if /\s$/.test(input)
       {fst, snd, trd} = autocomplete(input.replace(/\s+$/,""))
@@ -37,13 +36,11 @@ $ ->
           coffee> #{input}
           #{trd.map((key)->snd+key).join("\n")}\n\n
         """
-        localStorage["log"] += log
         $log.append(log)
         $(window).scrollTop 9999999
     else if /^\.clear/.test(input)
       $input.val("")
       $log.html("")
-      localStorage["log"] = ""
     else if /^\.help/.test(input)
       output = help
       $input.val("")
@@ -51,18 +48,16 @@ $ ->
         coffee> #{input}
         #{output}
       """
-      localStorage["log"] += log
       $log.append(log)
     else
       history.unshift(input)
-      localStorage["history"] = JSON.stringify(history)
       buffer = ""
       log = (str)-> buffer += str + "\n"; undefined
-      dir = (obj, i=0)-> buffer += dump(obj, i) + "\n"; undefined
+      dir = (obj, i=1)-> buffer += dump(obj, i) + "\n"; undefined
       clear = -> $log.html(""); undefined
       try
         $$ = evaluate(macroexpand(input), {log, clear, dir, type, load, $$})
-        output = buffer + dump($$) + "\n\n"
+        output = buffer + dump($$, 1) + "\n\n"
       catch err
         output = buffer + err.stack + "\n"
       $input.val("")
@@ -70,7 +65,6 @@ $ ->
         coffee> #{input}
         #{output}
       """
-      localStorage["log"] += log
       $log.append(log)
     setTimeout (->
       $(window).scrollTop 9999999
@@ -200,9 +194,10 @@ dump = (o, depth=0, i=0)-> # any -> number? -> number? -> string
         #{props}
         #{space(i)}}
       """
+  console.log type(o)
   switch type(o)
     when "null", "undefined", "boolean",  "number" then ""+o
-    when "string"                                  then "\"#{o}\""
+    when "string"                                  then "\"#{$('<div>').text(o).html().split('\n').join('\\n')}\""
     when "function"                                then Object.prototype.toString.call(o)
     when "date"                                    then JSON.stringify(o)                                              Object.prototype.toString.call(o)
     when "array"
