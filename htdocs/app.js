@@ -79,7 +79,7 @@
           output = buffer + dump($$, 1) + "\n\n";
         } catch (_error) {
           err = _error;
-          output = buffer + err.stack + "\n";
+          output = buffer + err.constructor.name + ": " + err.message + "\n" + err.stack + "\n";
         }
         $input.val("");
         log = "coffee> " + input + "\n" + output;
@@ -304,7 +304,6 @@
         return "{\n" + props + "\n" + (space(i)) + "}";
       }
     };
-    console.log(type(o));
     switch (type(o)) {
       case "null":
       case "undefined":

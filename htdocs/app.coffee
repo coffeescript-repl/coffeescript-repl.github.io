@@ -59,7 +59,7 @@ $ ->
         $$ = evaluate(macroexpand(input), {log, clear, dir, type, load, $$})
         output = buffer + dump($$, 1) + "\n\n"
       catch err
-        output = buffer + err.stack + "\n"
+        output = buffer + err.constructor.name + ": " + err.message + "\n" + err.stack + "\n"
       $input.val("")
       log = """
         coffee> #{input}
@@ -194,7 +194,6 @@ dump = (o, depth=0, i=0)-> # any -> number? -> number? -> string
         #{props}
         #{space(i)}}
       """
-  console.log type(o)
   switch type(o)
     when "null", "undefined", "boolean",  "number" then ""+o
     when "string"                                  then "\"#{$('<div>').text(o).html().split('\n').join('\\n')}\""
