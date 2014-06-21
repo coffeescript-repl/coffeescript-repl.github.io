@@ -323,7 +323,7 @@
             _results = [];
             for (_i = 0, _len = o.length; _i < _len; _i++) {
               v = o[_i];
-              _results.push(dump(v, max, i + 1));
+              _results.push(dump(v, depth, i + 1));
             }
             return _results;
           })()).join(", ")) + "]";

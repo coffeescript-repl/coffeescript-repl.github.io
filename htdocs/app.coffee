@@ -200,7 +200,7 @@ dump = (o, depth=0, i=0)-> # any -> number? -> number? -> string
     when "function"                                then Object.prototype.toString.call(o)
     when "date"                                    then JSON.stringify(o)                                              Object.prototype.toString.call(o)
     when "array"
-      if i < depth                                 then "[#{(dump(v, max, i+1) for v in o).join(", ")}]" 
+      if i < depth                                 then "[#{(dump(v, depth, i+1) for v in o).join(", ")}]" 
       else                                              Object.prototype.toString.call(o)
     else
       if i < depth                                 then dumpObj(o)
