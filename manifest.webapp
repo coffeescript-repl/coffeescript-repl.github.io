@@ -1,5 +1,5 @@
 {
-  "version": "0.4",
+  "version": "1.0",
   "name": "CoffeeScript REPL",
   "description": "CoffeeScript REPL provides a way to interactively run JavaScript and see the results. It can be used for debugging, testing, or just trying things out.",
   "launch_path": "/index.html",
