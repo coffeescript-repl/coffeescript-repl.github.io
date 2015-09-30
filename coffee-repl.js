@@ -18,6 +18,8 @@ CoffeeScriptREPL["help"] = (function(){/*
 .[n]   revert last nth input
 .hist  view input history
 .clear clear log
+.jquery load(jquery.js)
+.lodash load(lodash.js)
 
 c[space][enter]
 cons[space][enter]
@@ -32,7 +34,7 @@ dir(obj [, depth])
 type(obj)  alt typeof()
 load(url)  load js file
 $$[n]         last nth result variable
-*/}).toString()//.match(/^function\s*\(\s*\)\s*\{\s*\/\*([\S\s]*?)\*\/\s*\}$/);
+*/}).toString().match(/^function\s*\(\s*\)\s*\{\s*\/\*([\S\s]*?)\*\/\s*\}$/)[1];
 
 CoffeeScriptREPL["prototype"] = {
     "terminal": CoffeeScriptREPL_terminal,  // Function(String):void
@@ -42,9 +44,11 @@ CoffeeScriptREPL["prototype"] = {
 };
 
 // --- implements ------------------------------------------
-function CoffeeScriptREPL_terminal(input){ // @arg String
+function CoffeeScriptREPL_terminal(input,  // @arg String
+                                   depth){ // @arg Number default = 0
                                            // @ret Void
     var n, that = this;
+    depth = depth || 0
     this["defaultInput"] = "";
     if (n = (/^\.([123456789](?:\d+)?)/.exec(input) || ["", ""])[1]) {
         if(!!this["inputQueue"][this["inputQueue"]["length"] - n]){
@@ -69,12 +73,18 @@ function CoffeeScriptREPL_terminal(input){ // @arg String
     } else if (/^.c/.test(input)) {
         this["clearLog"]();
     } else if (/^.he/.test(input)) {
-        this["buffer"] = "coffee> " + input + "\n" + CoffeeScriptREPL["help"];
+        this["log"] = "coffee> " + input + "\n" + CoffeeScriptREPL["help"];
+    } else if (/^.j/.test(input)) {
+      load("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js");
+      this["log"] = "coffee> load('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js')";
+    } else if (/^.l/.test(input)) {
+      load("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js");
+      this["log"] = "coffee> load('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js')";
     } else {
         this["buffer"] = "";
         this["log"] += "coffee> " + input + "\n";
         try{
-            var _log = dump(this["evaluate"](input), 0) + "\n";
+            var _log = dump(this["evaluate"](input), depth) + "\n";
         }catch(err){
             var _log = err["stack"] + "\n";
         }

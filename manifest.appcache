@@ -4,10 +4,10 @@ CACHE MANIFEST
 
 CACHE:
 
-app.js
+coffee-repl.js
 icon-128.png
-normalize.css
-style.css
+normalize.min.css
+coffee-script.min.js
 
 NETWORK:
 *
