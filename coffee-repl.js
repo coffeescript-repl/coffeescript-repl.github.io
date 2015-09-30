@@ -63,8 +63,10 @@ function CoffeeScriptREPL_terminal(input,  // @arg String
     } else if (/\s$/.test(input)) {
         var tmp = autocomplete(input["trimRight"]());
         if(tmp["results"]["length"] === 0){
+            this["buffer"] = ""
             this["defaultInput"] = input["trimRight"]();
         } else if(tmp["results"]["length"] === 1){
+            this["buffer"] = ""
             this["defaultInput"] = tmp["tokens"][0] + tmp["tokens"][1] + (tmp["tokens"][1]["length"] === 0 ? "" : ".") + tmp["results"][0];
         } else {
             this["buffer"] = "coffee> " + input + "\n" + tmp["results"]["join"](" \t");
